@@ -1,10 +1,10 @@
-8c38bea5eb17e6ca2bb090b5d09013d2 *DESCRIPTION
+5229117888b1acaeec49de55a9aea531 *DESCRIPTION
 98cefe6f1179fd32dbd46a39ab30bfd9 *NAMESPACE
-e09ce95e82429e5989f9ab257e2fe164 *NEWS.md
-582cfe981ebd98c0fe128616fbcc0b87 *R/AutoFSelect.R
+913f54179bb127b36193c33fccee7f5a *NEWS.md
+6ad6bfc8b39cf996bdc58d41c36fe715 *R/AutoFSelect.R
 bf08bb0b611e4e5d48bdba3f3f331a6c *R/FSelectInstanceMultiCrit.R
 859ba2d8a593241815b79e7ad71861ea *R/FSelectInstanceSingleCrit.R
-dfa4e15c9381e8be4d62cf81fedae19d *R/FSelector.R
+cbe668b60f2d3c93a3e1dbb723f327bb *R/FSelector.R
 32b3bff5991b0b98f8d4766ae9628007 *R/FSelectorDesignPoints.R
 3e0517b581307906374314a85bae3ebd *R/FSelectorExhaustiveSearch.R
 6289e205134fd111bb8c0168a20eb423 *R/FSelectorFromOptimizer.R
@@ -17,10 +17,10 @@ ffc8e7b94bb784b2c739f818c6ac19f9 *R/mlr_fselectors.R
 72437f2b5ca6f2beab0aa4009ed2f53c *R/sugar.R
 b38a10939b75bfc1d7f7d53629c828ca *R/zzz.R
 86002681ca38b9a277028708a7449229 *README.md
-2fdb4936cdfb40a1960f5e38346e13fd *build/partial.rdb
+663a818ea007ff335a7ae3c19da22179 *build/partial.rdb
 465dea39c2f1059c36dc94a4e788c756 *inst/extdata/titanic.rds
 2588cbfacebe28c119f41a16f5e8f5fc *inst/references.bib
-2882a7a5ab40f605fd45befa29b5663f *man/AutoFSelect.Rd
+2dac1fedeaf32b55d285bdf64bd0c75c *man/AutoFSelect.Rd
 d2c11958517c96b0986b21b61ecc2f12 *man/FSelectInstanceMultiCrit.Rd
 c603370ffd278f02b4528687bfc63de8 *man/FSelectInstanceSingleCrit.Rd
 3266f554cd8e3d0bbc8c9c3c5760d710 *man/FSelector.Rd
@@ -42,7 +42,7 @@ f5c0be41ae060c65014ac7aa88c68315 *man/mlr_fselectors.Rd
 00112a0ee176df9db57603c50b657218 *tests/testthat/helper.R
 63151c6f31423e4b7c1735dfaaacc057 *tests/testthat/setup.R
 4f9431859c869f7efba687d5d802a5ce *tests/testthat/teardown.R
-5c30d107ec3bebd40484938bd361b28d *tests/testthat/test_AutoFSelect.R
+42173459a6d3712223898ac2389da319 *tests/testthat/test_AutoFSelect.R
 078e703a405f45e6234b62b897ed7142 *tests/testthat/test_FSelectInstanceMultiCrit.R
 d7c07bba0a2720653cf3f77b0ca17950 *tests/testthat/test_FSelectInstanceSingleCrit.R
 efcc923e2ac79c21b7c5fcbcbe021223 *tests/testthat/test_FSelectorDesignPoints.R
