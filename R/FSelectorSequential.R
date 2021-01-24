@@ -54,7 +54,7 @@ FSelectorSequential = R6Class("FSelectorSequential",
       if (inst$archive$n_batch == 0L) {
         stop("No results stored in archive")
       }
-      inst$archive$data()[, head(.SD, 1), by = get("batch_nr")]
+      inst$archive$data[, head(.SD, 1), by = get("batch_nr")]
     }
   ),
   private = list(
@@ -88,7 +88,7 @@ FSelectorSequential = R6Class("FSelectorSequential",
       repeat({
         if (archive$n_batch == pars$max_features) break
 
-        res = archive$best(m = archive$n_batch)
+        res = archive$best(batch = archive$n_batch)
         best_state = as.logical(res[, feature_names, with = FALSE])
 
         # Generate new states based on best feature set
