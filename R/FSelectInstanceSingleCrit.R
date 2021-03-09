@@ -77,7 +77,8 @@ FSelectInstanceSingleCrit = R6Class("FSelectInstanceSingleCrit",
       super$initialize(obj, obj$domain, terminator)
 
       self$archive = ArchiveFSelect$new(search_space = self$objective$domain,
-        codomain = self$objective$codomain, check_values = check_values)
+        codomain = self$objective$codomain, check_values = check_values,
+        store_x_domain = FALSE)
       self$objective$archive = self$archive
 
       private$.objective_function = objective_function
@@ -92,7 +93,11 @@ FSelectInstanceSingleCrit = R6Class("FSelectInstanceSingleCrit",
       # Add feature names to result for easy task subsetting
       features = list(self$objective$task$feature_names[as.logical(xdt)])
       xdt[, features := list(features)]
-      super$assign_result(xdt, y)
+      assert_data_table(xdt, nrows = 1L)
+      assert_names(names(xdt), must.include = self$search_space$ids())
+      assert_number(y)
+      assert_names(names(y), permutation.of = self$objective$codomain$ids())
+      private$.result = cbind(xdt, t(y)) # t(y) so the name of y stays
     }
   ),
 
