@@ -148,3 +148,60 @@ test_that("AutoFSelector works with GraphLearner", {
   # Check for clone
   expect_equal(task$feature_names, c("x1", "x2", "x3" ,"x4"))
 })
+
+test_that("AutoFSelector get_base_learner method works", {
+  # simple learner
+  learner = lrn("classif.rpart")
+  afs = AutoFSelector$new(
+    fselector = fs("random_search"),
+    learner = learner,
+    resampling = rsmp("holdout"),
+    measure = msr("classif.ce"),
+    terminator = trm("evals", n_evals = 1))
+  afs$train(tsk("pima"))
+
+  expect_learner(afs$base_learner())
+  expect_equal(afs$base_learner()$id, "classif.rpart")
+  expect_learner(afs$base_learner(recursive = 0))
+  expect_equal(afs$base_learner(recursive = 0)$id, "classif.rpart")
+
+  # graph learner
+  learner = as_learner(pipeline_robustify() %>>% lrn("classif.rpart"))
+  learner$id = "graphlearner.classif.rpart"
+  afs = AutoFSelector$new(
+    fselector = fs("random_search"),
+    learner = learner,
+    resampling = rsmp("holdout"),
+    measure = msr("classif.ce"),
+    terminator = trm("evals", n_evals = 1))
+  afs$train(tsk("pima"))
+
+  expect_learner(afs$base_learner(recursive = 0))
+  expect_equal(afs$base_learner(recursive = 0)$id, "graphlearner.classif.rpart")
+  # expect_learner(afs$base_learner())
+  # expect_equal(afs$base_learner()$id, "classif.rpart")
+})
+
+test_that("AutoFSelector hash works #647 in mlr3", {
+  afs_1 = AutoFSelector$new(
+    learner = lrn("classif.rpart"), 
+    resampling = rsmp("holdout"), 
+    measure = msr("classif.ce"), 
+    terminator = trm("evals", n_evals = 4), 
+    fselector = fs("random_search"),
+    store_benchmark_result = FALSE)
+
+  afs_2 = AutoFSelector$new(
+    learner = lrn("classif.rpart"), 
+    resampling = rsmp("holdout"), 
+    measure = msr("classif.ce"), 
+    terminator = trm("evals", n_evals = 4), 
+    fselector = fs("random_search"),
+    store_benchmark_result = TRUE)
+
+  resampling_outer = rsmp("holdout")
+  grid = benchmark_grid(tsk("iris"), list(afs_1, afs_2), resampling_outer)
+  bmr = benchmark(grid, store_models = TRUE)
+
+  expect_data_table(bmr$learners, nrows = 2)
+})

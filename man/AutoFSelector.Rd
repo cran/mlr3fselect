@@ -69,8 +69,11 @@ Trained learner.}
 Internally created feature selection instance with all intermediate
 results.}
 
-\item{\code{fselect_result}}{(named \code{list()})\cr
+\item{\code{fselect_result}}{(\link[data.table:data.table]{data.table::data.table})\cr
 Short-cut to \verb{$result} from \link{FSelectInstanceSingleCrit}.}
+
+\item{\code{hash}}{(\code{character(1)})\cr
+Hash (unique identifier) for this object.}
 }
 \if{html}{\out{</div>}}
 }
@@ -78,22 +81,21 @@ Short-cut to \verb{$result} from \link{FSelectInstanceSingleCrit}.}
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{AutoFSelector$new()}}
+\item \href{#method-base_learner}{\code{AutoFSelector$base_learner()}}
 \item \href{#method-clone}{\code{AutoFSelector$clone()}}
 }
 }
 \if{html}{
 \out{<details ><summary>Inherited methods</summary>}
 \itemize{
+\item \out{<span class="pkg-link" data-pkg="mlr3" data-topic="Learner" data-id="base_learner">}\href{../../mlr3/html/Learner.html#method-base_learner}{\code{mlr3::Learner$base_learner()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="mlr3" data-topic="Learner" data-id="format">}\href{../../mlr3/html/Learner.html#method-format}{\code{mlr3::Learner$format()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="mlr3" data-topic="Learner" data-id="help">}\href{../../mlr3/html/Learner.html#method-help}{\code{mlr3::Learner$help()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="mlr3" data-topic="Learner" data-id="is_retrainable">}\href{../../mlr3/html/Learner.html#method-is_retrainable}{\code{mlr3::Learner$is_retrainable()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="mlr3" data-topic="Learner" data-id="predict">}\href{../../mlr3/html/Learner.html#method-predict}{\code{mlr3::Learner$predict()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="mlr3" data-topic="Learner" data-id="predict_newdata">}\href{../../mlr3/html/Learner.html#method-predict_newdata}{\code{mlr3::Learner$predict_newdata()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="mlr3" data-topic="Learner" data-id="print">}\href{../../mlr3/html/Learner.html#method-print}{\code{mlr3::Learner$print()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="mlr3" data-topic="Learner" data-id="reset">}\href{../../mlr3/html/Learner.html#method-reset}{\code{mlr3::Learner$reset()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="mlr3" data-topic="Learner" data-id="retrain">}\href{../../mlr3/html/Learner.html#method-retrain}{\code{mlr3::Learner$retrain()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="mlr3" data-topic="Learner" data-id="train">}\href{../../mlr3/html/Learner.html#method-train}{\code{mlr3::Learner$train()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="mlr3" data-topic="Learner" data-id="update">}\href{../../mlr3/html/Learner.html#method-update}{\code{mlr3::Learner$update()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -155,6 +157,29 @@ Check the parameters before the evaluation and the results for
 validity?}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-base_learner"></a>}}
+\if{latex}{\out{\hypertarget{method-base_learner}{}}}
+\subsection{Method \code{base_learner()}}{
+Extracts the base learner from nested learner objects like
+\code{GraphLearner} in \CRANpkg{mlr3pipelines}. If \code{recursive = 0}, the (tuned)
+learner is returned.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{AutoFSelector$base_learner(recursive = Inf)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{recursive}}{(\code{integer(1)})\cr
+Depth of recursion for multiple nested objects.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\link{Learner}.
 }
 }
 \if{html}{\out{<hr>}}

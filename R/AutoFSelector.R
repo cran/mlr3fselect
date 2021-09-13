@@ -85,7 +85,7 @@ AutoFSelector = R6Class("AutoFSelector",
       store_fselect_instance = TRUE, store_benchmark_result = TRUE,
       store_models = FALSE, check_values = FALSE) {
       ia = list()
-      ia$learner = assert_learner(learner)$clone(deep = TRUE)
+      ia$learner = assert_learner(as_learner(learner, clone = TRUE))
       ia$resampling = assert_resampling(resampling,
         instantiated = FALSE)$clone()
       ia$measure = assert_measure(as_measure(measure), learner = learner)
@@ -117,6 +117,19 @@ AutoFSelector = R6Class("AutoFSelector",
 
       self$predict_type = learner$predict_type
       self$predict_sets = learner$predict_sets
+    },
+
+    #' @description
+    #' Extracts the base learner from nested learner objects like
+    #' `GraphLearner` in \CRANpkg{mlr3pipelines}. If `recursive = 0`, the (tuned)
+    #' learner is returned.
+    #'
+    #' @param recursive (`integer(1)`)\cr
+    #'   Depth of recursion for multiple nested objects.
+    #'
+    #' @return [Learner].
+    base_learner = function(recursive = Inf) {
+      if(recursive == 0) self$learner else self$learner$base_learner(recursive -1)
     }
   ),
 
@@ -148,6 +161,10 @@ AutoFSelector = R6Class("AutoFSelector",
       self$model$learner$predict(task)
     },
 
+    .base_learner = function(recursive = Inf) {
+      if (recursive == 0L) self$learner else self$learner$base_learner(recursive - 1L)
+    },
+
     .store_fselect_instance = NULL
   ),
 
@@ -173,8 +190,16 @@ AutoFSelector = R6Class("AutoFSelector",
     #' results.
     fselect_instance = function() self$model$fselect_instance,
 
-    #' @field fselect_result (named `list()`)\cr
+    #' @field fselect_result ([data.table::data.table])\cr
     #' Short-cut to `$result` from [FSelectInstanceSingleCrit].
-    fselect_result = function() self$fselect_instance$result
+    fselect_result = function() self$fselect_instance$result,
+
+    #' @field hash (`character(1)`)\cr
+    #' Hash (unique identifier) for this object.
+    hash = function(rhs) {
+      assert_ro_binding(rhs)
+      calculate_hash(class(self), self$id, self$param_set$values, private$.predict_type, self$fallback$hash, self$instance_args,
+        private$.store_fselect_instance)
+    }
   )
 )

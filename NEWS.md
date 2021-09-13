@@ -1,3 +1,11 @@
+# mlr3fselect 0.6.0
+
+- Adds `AutoFSelector$base_learner()` method to extract the base learner from 
+  nested learner objects.
+- Adds `fselect()`, `auto_fselector()` and `fselect_nested()` sugar functions.
+- Adds `extract_inner_fselect_results()` and `extract_inner_fselect_archives()`  
+  helper function to extract inner feature selection results and archives.
+
 # mlr3fselect 0.5.1
 
 - Remove `x_domain` column from archive.
