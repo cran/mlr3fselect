@@ -22,6 +22,7 @@ Internally used to transform \link[bbotk:Optimizer]{bbotk::Optimizer} to \link{F
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="mlr3fselect" data-topic="FSelector" data-id="format">}\href{../../mlr3fselect/html/FSelector.html#method-format}{\code{mlr3fselect::FSelector$format()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="mlr3fselect" data-topic="FSelector" data-id="help">}\href{../../mlr3fselect/html/FSelector.html#method-help}{\code{mlr3fselect::FSelector$help()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="mlr3fselect" data-topic="FSelector" data-id="print">}\href{../../mlr3fselect/html/FSelector.html#method-print}{\code{mlr3fselect::FSelector$print()}}\out{</span>}
 }
 \out{</details>}
@@ -32,7 +33,7 @@ Internally used to transform \link[bbotk:Optimizer]{bbotk::Optimizer} to \link{F
 \subsection{Method \code{new()}}{
 Creates a new instance of this \link[R6:R6Class]{R6} class.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FSelectorFromOptimizer$new(optimizer)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FSelectorFromOptimizer$new(optimizer, man = NA_character_)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -40,6 +41,10 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
 \describe{
 \item{\code{optimizer}}{\link[bbotk:Optimizer]{bbotk::Optimizer}\cr
 Optimizer that is called.}
+
+\item{\code{man}}{(\code{character(1)})\cr
+String in the format \verb{[pkg]::[topic]} pointing to a manual page for this object.
+The referenced help package can be opened via method \verb{$help()}.}
 }
 \if{html}{\out{</div>}}
 }

@@ -1,27 +1,28 @@
-#' @title Feature Selection via Sequential Selection
+#' @title Feature Selection via Sequential Search
+#'
+#' @name mlr_fselectors_sequential
 #'
 #' @description
-#' `FSelectorSequential` class that implements sequential feature selection. The
-#' sequential forward selection (`strategy = fsf`) extends the feature set in
-#' each step with the feature that increases the models performance the most.
-#' The sequential backward selection (`strategy = fsb`) starts with the complete
-#' future set and removes in each step the feature that decreases the models
-#' performance the least.
+#' Sequential search iteratively adds features to the set.
+#'
+#' Sequential forward selection (`strategy = fsf`) extends the feature set in each iteration with the feature that increases the models performance the most.
+#' Sequential backward selection (`strategy = fsb`) follows the same idea but starts with all features and removes features from the set.
+#'
+#' The feature selection terminates itself when `min_features` or `max_features` is reached.
+#' It is not necessary to set a termination criterion.
 #'
 #' @templateVar id sequential
 #' @template section_dictionary_fselectors
 #'
 #' @section Parameters:
 #' \describe{
+#' \item{`min_features`}{`integer(1)`\cr
+#' Minimum number of features. By default, 1.}
 #' \item{`max_features`}{`integer(1)`\cr
 #' Maximum number of features. By default, number of features in [mlr3::Task].}
 #' \item{`strategy`}{`character(1)`\cr
 #' Search method `sfs` (forward search) or `sbs` (backward search).}
 #' }
-#'
-#' @note
-#' Feature sets are evaluated in batches, where each batch is one step in the
-#' sequential feature selection.
 #'
 #' @export
 #' @template example
@@ -33,14 +34,17 @@ FSelectorSequential = R6Class("FSelectorSequential",
     #' Creates a new instance of this [R6][R6::R6Class] class.`
     initialize = function() {
       ps = ps(
+        min_features = p_int(lower = 1, default = 1),
         max_features = p_int(lower = 1),
         strategy = p_fct(levels = c("sfs", "sbs"), default = "sfs")
       )
-
-      ps$values = list(strategy = "sfs")
+      ps$values = list(strategy = "sfs", min_features = 1)
 
       super$initialize(
-        param_set = ps, properties = "single-crit"
+        param_set = ps,
+        properties = "single-crit",
+        label = "Sequential Search",
+        man = "mlr3fselect::mlr_fselectors_sequential"
       )
     },
 
@@ -75,24 +79,18 @@ FSelectorSequential = R6Class("FSelectorSequential",
       }
 
       # Initialize states for first batch
-      if (self$param_set$values$strategy == "sfs") {
-        states = as.data.table(diag(TRUE, length(feature_names),
-          length(feature_names)))
-        names(states) = feature_names
-      } else {
-        combinations = combn(length(feature_names),
-          pars$max_features)
-        states = map_dtr(seq_len(ncol(combinations)), function(j) {
-          state = rep(FALSE, length(feature_names))
-          state[combinations[, j]] = TRUE
-          set_names(as.list(state), feature_names)
-        })
-      }
+      m  = if (self$param_set$values$strategy == "sfs") pars$min_features else pars$max_features
+      combinations = combn(length(feature_names), m)
+      states = map_dtr(seq_len(ncol(combinations)), function(j) {
+        state = rep(FALSE, length(feature_names))
+        state[combinations[, j]] = TRUE
+        set_names(as.list(state), feature_names)
+      })
 
       inst$eval_batch(states)
 
       repeat({
-        if (archive$n_batch == pars$max_features) break
+        if (archive$n_batch == pars$max_features - pars$min_features + 1) break
 
         res = archive$best(batch = archive$n_batch)
         best_state = as.logical(res[, feature_names, with = FALSE])
