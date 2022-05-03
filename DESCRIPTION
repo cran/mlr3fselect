@@ -1,6 +1,6 @@
 Package: mlr3fselect
 Title: Feature Selection for 'mlr3'
-Version: 0.7.0
+Version: 0.7.1
 Authors@R: 
     c(person(given = "Marc",
              family = "Becker",
@@ -53,11 +53,11 @@ Collate: 'assertions.R' 'AutoFSelector.R' 'ArchiveFSelect.R'
         'FSelectorGeneticSearch.R' 'FSelectInstanceMultiCrit.R'
         'FSelectInstanceSingleCrit.R' 'reexports.R' 'sugar.R'
         'bibentries.R' 'zzz.R'
-Packaged: 2022-04-04 11:14:30 UTC; marc
+Packaged: 2022-05-03 10:01:26 UTC; marc
 Author: Marc Becker [aut, cre] (<https://orcid.org/0000-0002-8115-0400>),
   Patrick Schratz [aut] (<https://orcid.org/0000-0003-0748-6624>),
   Michel Lang [aut] (<https://orcid.org/0000-0001-9754-0393>),
   Bernd Bischl [aut] (<https://orcid.org/0000-0001-6002-6980>)
 Maintainer: Marc Becker <marcbecker@posteo.de>
 Repository: CRAN
-Date/Publication: 2022-04-08 07:12:30 UTC
+Date/Publication: 2022-05-03 13:40:02 UTC
