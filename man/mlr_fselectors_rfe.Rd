@@ -3,11 +3,14 @@
 \name{mlr_fselectors_rfe}
 \alias{mlr_fselectors_rfe}
 \alias{FSelectorRFE}
-\title{Feature Selection via Recursive Feature Elimination}
+\title{Feature Selection with Recursive Feature Elimination}
 \description{
+Feature selection using the Recursive Feature Elimination Algorithm (RFE).
 Recursive feature elimination iteratively removes features with a low importance score.
-
-The learner is trained on all features at the start and importance scores are calculated for each feature (see section on optional extractors in \link{Learner}).
+Only works with \link{Learner}s that can calculate importance scores (see section on optional extractors in \link{Learner}).
+}
+\details{
+The learner is trained on all features at the start and importance scores are calculated for each feature .
 Then the least important feature is removed and the learner is trained on the reduced feature set.
 The importance scores are calculated again and the procedure is repeated until the desired number of features is reached.
 The non-recursive option (\code{recursive = FALSE}) only uses the importance scores calculated in the first iteration.
@@ -17,21 +20,21 @@ It is not necessary to set a termination criterion.
 }
 \section{Dictionary}{
 
-This \link{FSelector} can be instantiated via the \link[mlr3misc:Dictionary]{dictionary}
-\link{mlr_fselectors} or with the associated sugar function \code{\link[=fs]{fs()}}:
+This \link{FSelector} can be instantiated with the associated sugar function \code{\link[=fs]{fs()}}:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{mlr_fselectors$get("rfe")
-fs("rfe")
+\if{html}{\out{<div class="sourceCode">}}\preformatted{fs("rfe")
 }\if{html}{\out{</div>}}
 }
 
-\section{Parameters}{
+\section{Control Parameters}{
 
 \describe{
 \item{\code{n_features}}{\code{integer(1)}\cr
-The number of features to select. By default half of the features are selected.}
+The number of features to select.
+By default half of the features are selected.}
 \item{\code{feature_fraction}}{\code{double(1)}\cr
-Fraction of features to retain in each iteration, The default 0.5 retrains half of the features.}
+Fraction of features to retain in each iteration.
+The default 0.5 retrains half of the features.}
 \item{\code{feature_number}}{\code{integer(1)}\cr
 Number of features to remove in each iteration.}
 \item{\code{subset_sizes}}{\code{integer()}\cr
@@ -45,16 +48,16 @@ The parameter \code{feature_fraction}, \code{feature_number} and \code{subset_si
 }
 
 \examples{
-# retrieve task
-task = tsk("pima")
+# Feature Selection
+\donttest{
 
-# load learner
+# retrieve task and load learner
+task = tsk("penguins")
 learner = lrn("classif.rpart")
 
-\donttest{
-# feature selection on the pima indians diabetes data set
+# run feature selection on the Palmer Penguins data set
 instance = fselect(
-  method = "rfe",
+  method = fs("rfe"),
   task = task,
   learner = learner,
   resampling = rsmp("holdout"),
@@ -73,6 +76,17 @@ task$select(instance$result_feature_set)
 learner$train(task)
 }
 }
+\seealso{
+Other FSelector: 
+\code{\link{mlr_fselectors_design_points}},
+\code{\link{mlr_fselectors_exhaustive_search}},
+\code{\link{mlr_fselectors_genetic_search}},
+\code{\link{mlr_fselectors_random_search}},
+\code{\link{mlr_fselectors_sequential}},
+\code{\link{mlr_fselectors_shadow_variable_search}},
+\code{\link{mlr_fselectors}}
+}
+\concept{FSelector}
 \section{Super class}{
 \code{\link[mlr3fselect:FSelector]{mlr3fselect::FSelector}} -> \code{FSelectorRFE}
 }

@@ -1,6 +1,6 @@
 Package: mlr3fselect
 Title: Feature Selection for 'mlr3'
-Version: 0.7.2
+Version: 0.8.0
 Authors@R: 
     c(person(given = "Marc",
              family = "Becker",
@@ -42,22 +42,22 @@ Encoding: UTF-8
 Language: en-US
 NeedsCompilation: no
 RoxygenNote: 7.2.1
-Collate: 'assertions.R' 'AutoFSelector.R' 'ArchiveFSelect.R'
-        'ObjectiveFSelect.R' 'helper.R' 'mlr_fselectors.R'
-        'auto_fselector.R' 'extract_inner_fselect_archives.R'
-        'extract_inner_fselect_results.R' 'fselect.R'
-        'fselect_nested.R' 'FSelector.R' 'FSelectorFromOptimizer.R'
-        'FSelectorExhaustiveSearch.R' 'FSelectorRFE.R'
+Collate: 'ArchiveFSelect.R' 'AutoFSelector.R'
+        'FSelectInstanceSingleCrit.R' 'FSelectInstanceMultiCrit.R'
+        'mlr_fselectors.R' 'FSelector.R' 'FSelectorDesignPoints.R'
+        'FSelectorExhaustiveSearch.R' 'FSelectorFromOptimizer.R'
+        'FSelectorGeneticSearch.R' 'FSelectorRFE.R'
         'FSelectorRandomSearch.R' 'FSelectorSequential.R'
-        'FSelectorShadowVariableSearch.R' 'FSelectorDesignPoints.R'
-        'FSelectorGeneticSearch.R' 'FSelectInstanceMultiCrit.R'
-        'FSelectInstanceSingleCrit.R' 'reexports.R' 'sugar.R'
-        'bibentries.R' 'zzz.R'
-Packaged: 2022-08-25 10:00:26 UTC; marc
+        'FSelectorShadowVariableSearch.R' 'ObjectiveFSelect.R'
+        'assertions.R' 'auto_fselector.R' 'bibentries.R'
+        'extract_inner_fselect_archives.R'
+        'extract_inner_fselect_results.R' 'fselect.R'
+        'fselect_nested.R' 'helper.R' 'reexports.R' 'sugar.R' 'zzz.R'
+Packaged: 2022-11-15 17:26:52 UTC; marc
 Author: Marc Becker [aut, cre] (<https://orcid.org/0000-0002-8115-0400>),
   Patrick Schratz [aut] (<https://orcid.org/0000-0003-0748-6624>),
   Michel Lang [aut] (<https://orcid.org/0000-0001-9754-0393>),
   Bernd Bischl [aut] (<https://orcid.org/0000-0001-6002-6980>)
 Maintainer: Marc Becker <marcbecker@posteo.de>
 Repository: CRAN
-Date/Publication: 2022-08-25 10:40:02 UTC
+Date/Publication: 2022-11-16 12:10:33 UTC

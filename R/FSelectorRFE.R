@@ -1,11 +1,15 @@
-#' @title Feature Selection via Recursive Feature Elimination
+#' @title Feature Selection with Recursive Feature Elimination
 #'
+#' @include mlr_fselectors.R
 #' @name mlr_fselectors_rfe
 #'
 #' @description
+#' Feature selection using the Recursive Feature Elimination Algorithm (RFE).
 #' Recursive feature elimination iteratively removes features with a low importance score.
+#' Only works with [Learner]s that can calculate importance scores (see section on optional extractors in [Learner]).
 #'
-#' The learner is trained on all features at the start and importance scores are calculated for each feature (see section on optional extractors in [Learner]).
+#' @details
+#' The learner is trained on all features at the start and importance scores are calculated for each feature .
 #' Then the least important feature is removed and the learner is trained on the reduced feature set.
 #' The importance scores are calculated again and the procedure is repeated until the desired number of features is reached.
 #' The non-recursive option (`recursive = FALSE`) only uses the importance scores calculated in the first iteration.
@@ -16,12 +20,14 @@
 #' @templateVar id rfe
 #' @template section_dictionary_fselectors
 #'
-#' @section Parameters:
+#' @section Control Parameters:
 #' \describe{
 #' \item{`n_features`}{`integer(1)`\cr
-#'   The number of features to select. By default half of the features are selected.}
+#'   The number of features to select.
+#'   By default half of the features are selected.}
 #' \item{`feature_fraction`}{`double(1)`\cr
-#'   Fraction of features to retain in each iteration, The default 0.5 retrains half of the features.}
+#'   Fraction of features to retain in each iteration.
+#'   The default 0.5 retrains half of the features.}
 #' \item{`feature_number`}{`integer(1)`\cr
 #'   Number of features to remove in each iteration.}
 #' \item{`subset_sizes`}{`integer()`\cr
@@ -33,18 +39,19 @@
 #'
 #' The parameter `feature_fraction`, `feature_number` and `subset_sizes` are mutually exclusive.
 #'
+#' @family FSelector
 #' @export
 #' @examples
-#' # retrieve task
-#' task = tsk("pima")
+#' # Feature Selection
+#' \donttest{
 #'
-#' # load learner
+#' # retrieve task and load learner
+#' task = tsk("penguins")
 #' learner = lrn("classif.rpart")
 #'
-#' \donttest{
-#' # feature selection on the pima indians diabetes data set
+#' # run feature selection on the Palmer Penguins data set
 #' instance = fselect(
-#'   method = "rfe",
+#'   method = fs("rfe"),
 #'   task = task,
 #'   learner = learner,
 #'   resampling = rsmp("holdout"),
@@ -93,6 +100,10 @@ FSelectorRFE = R6Class("FSelectorRFE",
   ),
   private = list(
     .optimize = function(inst) {
+
+      if ("importance" %nin% inst$objective$learner$properties) {
+        stopf("%s does not work with %s. Only learners that can calculate importance scores are supported.", format(self), format(inst$objective$learner))
+      }
 
       pars = self$param_set$values
       archive = inst$archive
