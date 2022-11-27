@@ -1,3 +1,7 @@
+# mlr3fselect 0.8.1
+
+* fix: Add `genalg` to required packages of `FSelectorGeneticSearch`.
+
 # mlr3fselect 0.8.0
 
 * refactor: `FSelectorRFE` throws an error if the learner does not support the `$importance()` method.

@@ -23,6 +23,8 @@
 #' @export
 #' @examples
 #' # Feature selection on Palmer Penguins data set
+#' \donttest{
+#'
 #' task = tsk("penguins")
 #'
 #' # Construct feature selection instance
@@ -45,6 +47,7 @@
 #'
 #' # Inspect all evaluated sets
 #' as.data.table(instance$archive)
+#' }
 FSelectInstanceMultiCrit = R6Class("FSelectInstanceMultiCrit",
   inherit = OptimInstanceMultiCrit,
   public = list(
@@ -93,6 +96,23 @@ FSelectInstanceMultiCrit = R6Class("FSelectInstanceMultiCrit",
       assert_data_table(ydt)
       assert_names(names(ydt), permutation.of = self$objective$codomain$ids())
       private$.result = cbind(xdt, ydt)
+    },
+
+    #' @description
+    #' Printer.
+    #'
+    #' @param ... (ignored).
+    print = function(...) {
+      catf(format(self))
+      catf(str_indent("* State: ", if (is.null(private$.result)) "Not optimized" else "Optimized"))
+      catf(str_indent("* Objective:", format(self$objective)))
+      catf(str_indent("* Terminator:", format(self$terminator)))
+      if (!is.null(private$.result)) {
+        catf("* Result:")
+        print(self$result[, c(self$archive$cols_x, self$archive$cols_y), with = FALSE])
+        catf("* Archive:")
+        print(as.data.table(self$archive)[, c(self$archive$cols_x, self$archive$cols_y), with = FALSE])
+      }
     }
   ),
 
