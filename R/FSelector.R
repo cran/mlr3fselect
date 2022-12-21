@@ -77,7 +77,8 @@ FSelector = R6Class("FSelector",
     #' Helper for print outputs.
     #'
     #' @return (`character()`).
-    format = function() {
+    #' @param ... (ignored).
+    format = function(...) {
       sprintf("<%s>", class(self)[1L])
     },
 
@@ -109,7 +110,11 @@ FSelector = R6Class("FSelector",
     #' @return [data.table::data.table()].
     optimize = function(inst) {
       assert_multi_class(inst, c("FSelectInstanceSingleCrit", "FSelectInstanceMultiCrit"))
-      optimize_default(inst, self, private)
+      inst$.__enclos_env__$private$.context = ContextOptimization$new(instance = inst, optimizer = self)
+      call_back("on_optimization_begin", inst$callbacks, get_private(inst)$.context)
+      result = optimize_default(inst, self, private)
+      call_back("on_optimization_end", inst$callbacks, get_private(inst)$.context)
+      result
     }
   ),
 

@@ -16,6 +16,7 @@ fselect(
   store_benchmark_result = TRUE,
   store_models = FALSE,
   check_values = FALSE,
+  callbacks = list(),
   ...
 )
 }
@@ -57,6 +58,9 @@ Store models in benchmark result?}
 Check the parameters before the evaluation and the results for
 validity?}
 
+\item{callbacks}{(list of \link{CallbackFSelect})\cr
+List of callbacks.}
+
 \item{...}{(named \code{list()})\cr
 Named arguments to be set as parameters of the fselector.}
 }
@@ -81,7 +85,7 @@ If no termination criterion is needed, set \code{term_evals}, \code{term_time} a
 
 \itemize{
 \item \href{https://mlr3book.mlr-org.com/feature-selection.html#fs-wrapper}{book chapter} on feature selection.
-\item \href{https://mlr-org.com/gallery/2020-09-14-mlr3fselect-basic/}{gallery post} on feature selection on the Titanic data set.
+\item \href{https://mlr-org.com/gallery/optimization/2020-09-14-mlr3fselect-basic/}{gallery post} on feature selection on the Titanic data set.
 }
 }
 

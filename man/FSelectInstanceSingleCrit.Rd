@@ -20,7 +20,7 @@ The \link{FSelector} is also supposed to store its final result, consisting of a
 
 \itemize{
 \item \href{https://mlr3book.mlr-org.com/feature-selection.html#fs-wrapper}{book chapter} on feature selection.
-\item \href{https://mlr-org.com/gallery/2020-09-14-mlr3fselect-basic/}{gallery post} on feature selection on the Titanic data set.
+\item \href{https://mlr-org.com/gallery/optimization/2020-09-14-mlr3fselect-basic/}{gallery post} on feature selection on the Titanic data set.
 }
 }
 
@@ -113,7 +113,8 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
   terminator,
   store_benchmark_result = TRUE,
   store_models = FALSE,
-  check_values = FALSE
+  check_values = FALSE,
+  callbacks = list()
 )}\if{html}{\out{</div>}}
 }
 
@@ -146,6 +147,9 @@ Store models in benchmark result?}
 \item{\code{check_values}}{(\code{logical(1)})\cr
 Check the parameters before the evaluation and the results for
 validity?}
+
+\item{\code{callbacks}}{(list of \link{CallbackFSelect})\cr
+List of callbacks.}
 }
 \if{html}{\out{</div>}}
 }
