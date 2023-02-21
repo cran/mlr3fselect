@@ -1,3 +1,12 @@
+# mlr3fselect 0.10.0
+
+* feat: Add callback `mlr3fselect.svm_rfe` to run recursive feature elimination on linear support vector machines.
+* refactor: The importance scores in `FSelectorRFE` are now aggregated by rank instead of averaging them.
+* feat: Add `FSelectorRFECV` optimizer to run recursive feature elimination with cross-validation.
+* refactor: `FSelectorRFE` works without `store_models = TRUE` now.
+* feat: The `as.data.table.ArchiveFSelect()` function additionally returns a character vector of selected features for each row.
+* refactor: Add `callbacks` argument to `fsi()` function.
+
 # mlr3fselect 0.9.1
 
 * refactor: Remove internal use of `mlr3pipelines`.
