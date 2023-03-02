@@ -30,6 +30,23 @@ By default (\code{"rank"}), the importance score vector of each fold is ranked a
 The option \code{"mean"} averages the score of each feature across the resampling iterations and removes the feature with the lowest average score.
 Averaging the scores is not appropriate for most importance measures.
 }
+\section{Archive}{
+
+The \link{ArchiveFSelect} holds the following additional columns:
+\itemize{
+\item \code{"importance"} (\code{numeric()})\cr
+The importance score vector of the feature subset.
+}
+}
+
+\section{Resources}{
+
+The \href{https://mlr-org.com/gallery.html}{gallery} features a collection of case studies and demos about optimization.
+\itemize{
+\item Utilize the built-in feature importance of models with \href{https://mlr-org.com/gallery/optimization/2023-02-07-recursive-feature-elimination/}{Recursive Feature Elimination}.
+}
+}
+
 \section{Dictionary}{
 
 This \link{FSelector} can be instantiated with the associated sugar function \code{\link[=fs]{fs()}}:
@@ -73,7 +90,7 @@ learner = lrn("classif.rpart")
 
 # run feature selection on the Palmer Penguins data set
 instance = fselect(
-  method = fs("rfe"),
+  fselector = fs("rfe"),
   task = task,
   learner = learner,
   resampling = rsmp("holdout"),

@@ -12,16 +12,20 @@ The \link{AutoFSelector} is a \link[mlr3:Learner]{mlr3::Learner} which wraps ano
 \enumerate{
 \item The wrapped (inner) learner is trained on the feature subsets via resampling.
 The feature selection can be specified by providing a \link{FSelector}, a \link[bbotk:Terminator]{bbotk::Terminator}, a \link[mlr3:Resampling]{mlr3::Resampling} and a \link[mlr3:Measure]{mlr3::Measure}.
-\item A final model is fit on the complete training data with the best found feature subset.
+\item A final model is fit on the complete training data with the best-found feature subset.
 }
 
 During \verb{$predict()} the \link{AutoFSelector} just calls the predict method of the wrapped (inner) learner.
 }
 \section{Resources}{
 
+There are several sections about feature selection in the \href{https://mlr3book.mlr-org.com}{mlr3book}.
 \itemize{
-\item \href{https://mlr3book.mlr-org.com/feature-selection.html#autofselect}{book chapter} on automatic feature selection.
+\item Estimate Model Performance with \href{https://mlr3book.mlr-org.com/optimization.html#sec-nested-resampling}{nested resampling} (Tuning workflow is transferable to feature selection).
+\item \href{https://mlr3book.mlr-org.com/feature-selection.html#sec-autofselectr}{Automate} the feature selection.
 }
+
+The \href{https://mlr-org.com/gallery.html}{gallery} features a collection of case studies and demos about optimization.
 }
 
 \section{Nested Resampling}{
@@ -42,7 +46,7 @@ split = partition(task, ratio = 0.8)
 
 # create auto fselector
 afs = auto_fselector(
-  method = fs("random_search"),
+  fselector = fs("random_search"),
   learner = lrn("classif.rpart"),
   resampling = rsmp ("holdout"),
   measure = msr("classif.ce"),
@@ -70,7 +74,7 @@ afs$fselect_instance
 # Nested Resampling
 
 afs = auto_fselector(
-  method = fs("random_search"),
+  fselector = fs("random_search"),
   learner = lrn("classif.rpart"),
   resampling = rsmp ("holdout"),
   measure = msr("classif.ce"),
@@ -159,11 +163,11 @@ Hash (unique identifier) for this object.}
 Creates a new instance of this \link[R6:R6Class]{R6} class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{AutoFSelector$new(
+  fselector,
   learner,
   resampling,
   measure = NULL,
   terminator,
-  fselector,
   store_fselect_instance = TRUE,
   store_benchmark_result = TRUE,
   store_models = FALSE,
@@ -175,6 +179,9 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{fselector}}{(\link{FSelector})\cr
+Optimization algorithm.}
+
 \item{\code{learner}}{(\link[mlr3:Learner]{mlr3::Learner})\cr
 Learner to optimize the feature subset for.}
 
@@ -188,9 +195,6 @@ Measure to optimize. If \code{NULL}, default measure is used.}
 
 \item{\code{terminator}}{(\link{Terminator})\cr
 Stop criterion of the feature selection.}
-
-\item{\code{fselector}}{(\link{FSelector})\cr
-Optimization algorithm.}
 
 \item{\code{store_fselect_instance}}{(\code{logical(1)})\cr
 If \code{TRUE} (default), stores the internally created \link{FSelectInstanceSingleCrit} with all intermediate results in slot \verb{$fselect_instance}.

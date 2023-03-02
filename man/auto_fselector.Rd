@@ -5,7 +5,7 @@
 \title{Function for Automatic Feature Selection}
 \usage{
 auto_fselector(
-  method,
+  fselector,
   learner,
   resampling,
   measure = NULL,
@@ -16,13 +16,12 @@ auto_fselector(
   store_benchmark_result = TRUE,
   store_models = FALSE,
   check_values = FALSE,
-  callbacks = list(),
-  ...
+  callbacks = list()
 )
 }
 \arguments{
-\item{method}{(\code{character(1)} | \link{FSelector})\cr
-Key to retrieve fselector from \link{mlr_fselectors} dictionary or \link{FSelector} object.}
+\item{fselector}{(\link{FSelector})\cr
+Optimization algorithm.}
 
 \item{learner}{(\link[mlr3:Learner]{mlr3::Learner})\cr
 Learner to optimize the feature subset for.}
@@ -36,10 +35,12 @@ Already instantiated resamplings are kept unchanged.}
 Measure to optimize. If \code{NULL}, default measure is used.}
 
 \item{term_evals}{(\code{integer(1)})\cr
-Number of allowed evaluations.}
+Number of allowed evaluations.
+Ignored if \code{terminator} is passed.}
 
 \item{term_time}{(\code{integer(1)})\cr
-Maximum allowed time in seconds.}
+Maximum allowed time in seconds.
+Ignored if \code{terminator} is passed.}
 
 \item{terminator}{(\link{Terminator})\cr
 Stop criterion of the feature selection.}
@@ -60,9 +61,6 @@ validity?}
 
 \item{callbacks}{(list of \link{CallbackFSelect})\cr
 List of callbacks.}
-
-\item{...}{(named \code{list()})\cr
-Named arguments to be set as parameters of the fselector.}
 }
 \value{
 \link{AutoFSelector}.
@@ -76,16 +74,20 @@ The \link{AutoFSelector} is a \link[mlr3:Learner]{mlr3::Learner} which wraps ano
 \enumerate{
 \item The wrapped (inner) learner is trained on the feature subsets via resampling.
 The feature selection can be specified by providing a \link{FSelector}, a \link[bbotk:Terminator]{bbotk::Terminator}, a \link[mlr3:Resampling]{mlr3::Resampling} and a \link[mlr3:Measure]{mlr3::Measure}.
-\item A final model is fit on the complete training data with the best found feature subset.
+\item A final model is fit on the complete training data with the best-found feature subset.
 }
 
 During \verb{$predict()} the \link{AutoFSelector} just calls the predict method of the wrapped (inner) learner.
 }
 \section{Resources}{
 
+There are several sections about feature selection in the \href{https://mlr3book.mlr-org.com}{mlr3book}.
 \itemize{
-\item \href{https://mlr3book.mlr-org.com/feature-selection.html#autofselect}{book chapter} on automatic feature selection.
+\item Estimate Model Performance with \href{https://mlr3book.mlr-org.com/optimization.html#sec-nested-resampling}{nested resampling} (Tuning workflow is transferable to feature selection).
+\item \href{https://mlr3book.mlr-org.com/feature-selection.html#sec-autofselectr}{Automate} the feature selection.
 }
+
+The \href{https://mlr-org.com/gallery.html}{gallery} features a collection of case studies and demos about optimization.
 }
 
 \section{Nested Resampling}{
@@ -106,7 +108,7 @@ split = partition(task, ratio = 0.8)
 
 # create auto fselector
 afs = auto_fselector(
-  method = fs("random_search"),
+  fselector = fs("random_search"),
   learner = lrn("classif.rpart"),
   resampling = rsmp ("holdout"),
   measure = msr("classif.ce"),
@@ -134,7 +136,7 @@ afs$fselect_instance
 # Nested Resampling
 
 afs = auto_fselector(
-  method = fs("random_search"),
+  fselector = fs("random_search"),
   learner = lrn("classif.rpart"),
   resampling = rsmp ("holdout"),
   measure = msr("classif.ce"),

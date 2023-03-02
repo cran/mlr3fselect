@@ -23,6 +23,14 @@ Shadow variable search creates for each feature a permutated copy and stops when
 The feature selection terminates itself when the first shadow variable is selected.
 It is not necessary to set a termination criterion.
 }
+\section{Resources}{
+
+The \href{https://mlr-org.com/gallery.html}{gallery} features a collection of case studies and demos about optimization.
+\itemize{
+\item Run a feature selection with \href{https://mlr-org.com/gallery/optimization/2023-02-01-shadow-variable-search/}{Shadow Variable Search}.
+}
+}
+
 \section{Dictionary}{
 
 This \link{FSelector} can be instantiated with the associated sugar function \code{\link[=fs]{fs()}}:
@@ -41,7 +49,7 @@ learner = lrn("classif.rpart")
 
 # run feature selection on the Palmer Penguins data set
 instance = fselect(
-  method = fs("shadow_variable_search"),
+  fselector = fs("shadow_variable_search"),
   task = task,
   learner = learner,
   resampling = rsmp("holdout"),

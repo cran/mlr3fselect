@@ -9,12 +9,17 @@
 #'
 #' 1. The wrapped (inner) learner is trained on the feature subsets via resampling.
 #'    The feature selection can be specified by providing a [FSelector], a [bbotk::Terminator], a [mlr3::Resampling] and a [mlr3::Measure].
-#' 2. A final model is fit on the complete training data with the best found feature subset.
+#' 2. A final model is fit on the complete training data with the best-found feature subset.
 #'
 #' During `$predict()` the [AutoFSelector] just calls the predict method of the wrapped (inner) learner.
 #'
 #' @section Resources:
-#' * [book chapter](https://mlr3book.mlr-org.com/feature-selection.html#autofselect) on automatic feature selection.
+#' There are several sections about feature selection in the [mlr3book](https://mlr3book.mlr-org.com).
+#'
+#' * Estimate Model Performance with [nested resampling](https://mlr3book.mlr-org.com/optimization.html#sec-nested-resampling) (Tuning workflow is transferable to feature selection).
+#' * [Automate](https://mlr3book.mlr-org.com/feature-selection.html#sec-autofselectr) the feature selection.
+#'
+#' The [gallery](https://mlr-org.com/gallery.html) features a collection of case studies and demos about optimization.
 #'
 #' @section Nested Resampling:
 #' Nested resampling can be performed by passing an [AutoFSelector] object to [mlr3::resample()] or [mlr3::benchmark()].
@@ -22,6 +27,7 @@
 #' The [mlr3::Resampling] passed to the [AutoFSelector] is meant to be the inner resampling, operating on the training set of an arbitrary outer resampling.
 #' For this reason it is not feasible to pass an instantiated [mlr3::Resampling] here.
 #'
+#' @template param_fselector
 #' @template param_learner
 #' @template param_resampling
 #' @template param_measure
@@ -43,7 +49,7 @@
 #'
 #' # create auto fselector
 #' afs = auto_fselector(
-#'   method = fs("random_search"),
+#'   fselector = fs("random_search"),
 #'   learner = lrn("classif.rpart"),
 #'   resampling = rsmp ("holdout"),
 #'   measure = msr("classif.ce"),
@@ -71,7 +77,7 @@
 #' # Nested Resampling
 #'
 #' afs = auto_fselector(
-#'   method = fs("random_search"),
+#'   fselector = fs("random_search"),
 #'   learner = lrn("classif.rpart"),
 #'   resampling = rsmp ("holdout"),
 #'   measure = msr("classif.ce"),
@@ -106,8 +112,9 @@ AutoFSelector = R6Class("AutoFSelector",
     #'
     #' @param fselector ([FSelector])\cr
     #'   Optimization algorithm.
-    initialize = function(learner, resampling, measure = NULL, terminator, fselector, store_fselect_instance = TRUE, store_benchmark_result = TRUE, store_models = FALSE, check_values = FALSE, callbacks = list()) {
+    initialize = function(fselector, learner, resampling, measure = NULL, terminator, store_fselect_instance = TRUE, store_benchmark_result = TRUE, store_models = FALSE, check_values = FALSE, callbacks = list()) {
       ia = list()
+      self$fselector = assert_r6(fselector, "FSelector")$clone()
       ia$learner = assert_learner(as_learner(learner, clone = TRUE))
       ia$resampling = assert_resampling(resampling, instantiated = FALSE)$clone()
       if (!is.null(measure)) ia$measure = assert_measure(as_measure(measure), learner = learner)
@@ -120,7 +127,6 @@ AutoFSelector = R6Class("AutoFSelector",
       ia$check_values = assert_flag(check_values)
       ia$callbacks = assert_callbacks(as_callbacks(callbacks))
       self$instance_args = ia
-      self$fselector = assert_r6(fselector, "FSelector")$clone()
 
       super$initialize(
         id = paste0(learner$id, ".fselector"),
