@@ -61,45 +61,45 @@ test_that("ArchiveFSelect as.data.table function works", {
 
   # default
   tab = as.data.table(instance$archive)
-  expect_data_table(tab, nrows = 4, ncols = 16)
+  expect_data_table(tab, nrows = 4, ncols = 17)
   expect_named(tab, c("age", "glucose", "insulin", "mass", "pedigree", "pregnant", "pressure", "triceps", "classif.ce",
-    "runtime_learners", "timestamp", "batch_nr", "warnings", "errors", "features", "resample_result"))
+    "runtime_learners", "timestamp", "batch_nr", "warnings", "errors", "features", "n_features", "resample_result"))
 
   # extra measure
   tab = as.data.table(instance$archive, measures = msr("classif.acc"))
-  expect_data_table(tab, nrows = 4, ncols = 17)
+  expect_data_table(tab, nrows = 4, ncols = 18)
   expect_named(tab, c("age", "glucose", "insulin", "mass", "pedigree", "pregnant", "pressure", "triceps", "classif.ce",
-    "classif.acc", "runtime_learners", "timestamp", "batch_nr",  "warnings", "errors", "features", "resample_result"))
+    "classif.acc", "runtime_learners", "timestamp", "batch_nr",  "warnings", "errors", "features", "n_features", "resample_result"))
 
   # extra measures
   tab = as.data.table(instance$archive, measures = msrs(c("classif.acc", "classif.mcc")))
-  expect_data_table(tab, nrows = 4, ncols = 18)
+  expect_data_table(tab, nrows = 4, ncols = 19)
   expect_named(tab, c("age", "glucose", "insulin", "mass", "pedigree", "pregnant", "pressure", "triceps", "classif.ce",
-    "classif.acc", "classif.mcc", "runtime_learners", "timestamp", "batch_nr", "warnings", "errors", "features", "resample_result"))
+    "classif.acc", "classif.mcc", "runtime_learners", "timestamp", "batch_nr", "warnings", "errors", "features", "n_features", "resample_result"))
 
   # exclude column
   tab = as.data.table(instance$archive, exclude_columns = "timestamp")
-  expect_data_table(tab, nrows = 4, ncols = 16)
+  expect_data_table(tab, nrows = 4, ncols = 17)
   expect_named(tab, c("age", "glucose", "insulin", "mass", "pedigree", "pregnant", "pressure", "triceps", "classif.ce",
-    "runtime_learners", "batch_nr", "uhash", "warnings", "errors", "features", "resample_result"))
+    "runtime_learners", "batch_nr", "uhash", "warnings", "errors", "features", "n_features", "resample_result"))
 
   # exclude columns
   tab = as.data.table(instance$archive, exclude_columns = c("timestamp", "uhash"))
-  expect_data_table(tab, nrows = 4, ncols = 15)
+  expect_data_table(tab, nrows = 4, ncols = 16)
   expect_named(tab, c("age", "glucose", "insulin", "mass", "pedigree", "pregnant", "pressure", "triceps", "classif.ce",
-    "runtime_learners", "batch_nr",  "warnings", "errors", "features", "resample_result"))
+    "runtime_learners", "batch_nr",  "warnings", "errors", "features", "n_features", "resample_result"))
 
   # no exclude
   tab = as.data.table(instance$archive, exclude_columns = NULL)
-  expect_data_table(tab, nrows = 4, ncols = 17)
+  expect_data_table(tab, nrows = 4, ncols = 18)
   expect_named(tab, c("age", "glucose", "insulin", "mass", "pedigree", "pregnant", "pressure", "triceps", "classif.ce",
-    "runtime_learners", "timestamp", "batch_nr",  "uhash", "warnings", "errors", "features", "resample_result"))
+    "runtime_learners", "timestamp", "batch_nr",  "uhash", "warnings", "errors", "features", "n_features", "resample_result"))
 
   # no unnest
   tab = as.data.table(instance$archive, unnest = NULL)
-  expect_data_table(tab, nrows = 4, ncols = 16)
+  expect_data_table(tab, nrows = 4, ncols = 17)
   expect_named(tab, c("age", "glucose", "insulin", "mass", "pedigree", "pregnant", "pressure", "triceps", "classif.ce",
-    "runtime_learners", "timestamp", "batch_nr",  "warnings", "errors", "features", "resample_result"))
+    "runtime_learners", "timestamp", "batch_nr",  "warnings", "errors", "features", "n_features", "resample_result"))
 
   # without benchmark result
   instance = FSelectInstanceSingleCrit$new(
@@ -113,9 +113,9 @@ test_that("ArchiveFSelect as.data.table function works", {
   fselector$optimize(instance)
 
   tab = as.data.table(instance$archive)
-  expect_data_table(tab, nrows = 4, ncols = 15)
+  expect_data_table(tab, nrows = 4, ncols = 16)
   expect_named(tab, c("age", "glucose", "insulin", "mass", "pedigree", "pregnant", "pressure", "triceps", "classif.ce",
-    "runtime_learners", "timestamp", "batch_nr", "warnings", "errors", "features"))
+    "runtime_learners", "timestamp", "batch_nr", "warnings", "errors", "features", "n_features"))
 
   # empty archive
   instance = FSelectInstanceSingleCrit$new(
@@ -138,4 +138,129 @@ test_that("ArchiveFSelect as.data.table function works", {
 
   tab = as.data.table(instance$archive)
   expect_equal(tab$batch_nr, 1:10)
+})
+
+test_that("global ties method works", {
+  design = mlr3misc::rowwise_table(
+    ~x1,   ~x2,   ~x3,    ~x4,
+    FALSE, TRUE,  FALSE,  TRUE,
+    TRUE,  FALSE, FALSE,  TRUE,
+    TRUE,  FALSE, FALSE,  FALSE,
+    FALSE, TRUE,  FALSE,  FALSE
+  )
+
+  score_design = data.table(
+    score = c(0.1, 0.2, 0.2, 0.1),
+    features = list(c("x2", "x4"), c("x1", "x4"), "x1", c("x1", "x2"))
+  )
+  measure = msr("dummy", score_design = score_design, minimize = FALSE)
+
+  # n_features
+  instance = fselect(
+    fselector = fs("design_points", design = design),
+    task = TEST_MAKE_TSK(),
+    learner = lrn("regr.rpart"),
+    resampling = rsmp("cv", folds = 3),
+    measures = measure,
+    ties_method = "least_features"
+  )
+
+  expect_equal(instance$result_feature_set, "x1")
+
+  # random
+  instance$clear()
+  instance = fselect(
+    fselector = fs("design_points", design = design),
+    task = TEST_MAKE_TSK(),
+    learner = lrn("regr.rpart"),
+    resampling = rsmp("cv", folds = 3),
+    measures = measure,
+    ties_method = "random"
+  )
+
+  expect_names(instance$result_feature_set, must.include = "x1")
+})
+
+test_that("local ties method works when maximize measure", {
+
+  design = mlr3misc::rowwise_table(
+    ~x1,   ~x2,   ~x3,    ~x4,
+    FALSE, TRUE,  FALSE,  TRUE,
+    TRUE,  FALSE, FALSE,  TRUE,
+    TRUE,  FALSE, FALSE,  FALSE,
+    FALSE, TRUE,  FALSE,  FALSE
+  )
+
+  score_design = data.table(
+    score = c(0.1, 0.2, 0.2, 0.1),
+    features = list(c("x2", "x4"), c("x1", "x4"), "x1", c("x1", "x2"))
+  )
+  measure = msr("dummy", score_design = score_design, minimize = FALSE)
+
+  instance = fselect(
+    fselector = fs("design_points", design = design),
+    task = TEST_MAKE_TSK(),
+    learner = lrn("regr.rpart"),
+    resampling = rsmp("cv", folds = 3),
+    measures = measure
+  )
+
+  expect_features(instance$archive$best(ties_method = "random")[, list(x1, x2, x3, x4)], must_include = "x1")
+  expect_features(instance$archive$best(ties_method = "least_features")[, list(x1, x2, x3, x4)], identical_to = "x1")
+})
+
+test_that("local ties method works when minimize measure", {
+
+  design = mlr3misc::rowwise_table(
+    ~x1,   ~x2,   ~x3,    ~x4,
+    TRUE,  FALSE, FALSE,  TRUE,
+    TRUE,  FALSE, FALSE,  FALSE,
+    FALSE, TRUE,  FALSE,  FALSE,
+    FALSE, TRUE,  FALSE,  TRUE
+  )
+
+  score_design = data.table(
+    score = c(0.2, 0.2, 0.1, 0.1),
+    features = list(c("x1", "x4"), "x1", "x2", c("x2", "x4"))
+  )
+  measure = msr("dummy", score_design = score_design, minimize = TRUE)
+
+  instance = fselect(
+    fselector = fs("design_points", design = design),
+    task = TEST_MAKE_TSK(),
+    learner = lrn("regr.rpart"),
+    resampling = rsmp("cv", folds = 3),
+    measures = measure
+  )
+
+  expect_features(instance$archive$best(ties_method = "random")[, list(x1, x2, x3, x4)], must_include = "x2")
+  expect_features(instance$archive$best(ties_method = "least_features")[, list(x1, x2, x3, x4)], identical_to = "x2")
+})
+
+test_that("local ties method works with batches", {
+
+  design = mlr3misc::rowwise_table(
+    ~x1,   ~x2,   ~x3,    ~x4,
+    TRUE,  FALSE, FALSE,  TRUE,
+    TRUE,  FALSE, FALSE,  FALSE,
+    FALSE, TRUE,  TRUE,   FALSE,
+    FALSE, TRUE,  FALSE,  FALSE
+  )
+
+  score_design = data.table(
+    score = c(0.2, 0.2, 0.2, 0.1),
+    features = list(c("x1", "x4"), "x1", c("x2", "x3"), c("x1", "x2"))
+  )
+  measure = msr("dummy", score_design = score_design, minimize = FALSE)
+
+  instance = fselect(
+    fselector = fs("design_points", design = design, batch_size = 1),
+    task = TEST_MAKE_TSK(),
+    learner = lrn("regr.rpart"),
+    resampling = rsmp("cv", folds = 3),
+    measures = measure
+  )
+
+  expect_features(instance$archive$best(batch = c(1, 2), ties_method = "random")[, list(x1, x2, x3, x4)], must_include = "x1")
+  expect_features(instance$archive$best(batch = c(2, 3), ties_method = "least_features")[, list(x1, x2, x3, x4)], identical_to = "x1")
 })

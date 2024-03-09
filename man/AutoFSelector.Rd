@@ -21,8 +21,7 @@ During \verb{$predict()} the \link{AutoFSelector} just calls the predict method 
 
 There are several sections about feature selection in the \href{https://mlr3book.mlr-org.com}{mlr3book}.
 \itemize{
-\item Estimate Model Performance with \href{https://mlr3book.mlr-org.com/optimization.html#sec-nested-resampling}{nested resampling} (Tuning workflow is transferable to feature selection).
-\item \href{https://mlr3book.mlr-org.com/feature-selection.html#sec-autofselectr}{Automate} the feature selection.
+\item Estimate Model Performance with \href{https://mlr3book.mlr-org.com/chapters/chapter6/feature_selection.html#sec-autofselect}{nested resampling}.
 }
 
 The \href{https://mlr-org.com/gallery.html}{gallery} features a collection of case studies and demos about optimization.
@@ -128,6 +127,9 @@ Must be an element of \verb{$predict_types}.}
 
 \item{\code{hash}}{(\code{character(1)})\cr
 Hash (unique identifier) for this object.}
+
+\item{\code{phash}}{(\code{character(1)})\cr
+Hash (unique identifier) for this partial object, excluding some components which are varied systematically during tuning (parameter values) or feature selection (feature names).}
 }
 \if{html}{\out{</div>}}
 }
@@ -172,7 +174,8 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
   store_benchmark_result = TRUE,
   store_models = FALSE,
   check_values = FALSE,
-  callbacks = list()
+  callbacks = list(),
+  ties_method = "least_features"
 )}\if{html}{\out{</div>}}
 }
 
@@ -212,6 +215,14 @@ validity?}
 
 \item{\code{callbacks}}{(list of \link{CallbackFSelect})\cr
 List of callbacks.}
+
+\item{\code{ties_method}}{(\code{character(1)})\cr
+The method to break ties when selecting sets while optimizing and when selecting the best set.
+Can be \code{"least_features"} or \code{"random"}.
+The option \code{"least_features"} (default) selects the feature set with the least features.
+If there are multiple best feature sets with the same number of features, one is selected randomly.
+The \code{random} method returns a random feature set from the best feature sets.
+Ignored if multiple measures are used.}
 }
 \if{html}{\out{</div>}}
 }

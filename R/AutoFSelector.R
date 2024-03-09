@@ -16,8 +16,7 @@
 #' @section Resources:
 #' There are several sections about feature selection in the [mlr3book](https://mlr3book.mlr-org.com).
 #'
-#' * Estimate Model Performance with [nested resampling](https://mlr3book.mlr-org.com/optimization.html#sec-nested-resampling) (Tuning workflow is transferable to feature selection).
-#' * [Automate](https://mlr3book.mlr-org.com/feature-selection.html#sec-autofselectr) the feature selection.
+#' * Estimate Model Performance with [nested resampling](https://mlr3book.mlr-org.com/chapters/chapter6/feature_selection.html#sec-autofselect).
 #'
 #' The [gallery](https://mlr-org.com/gallery.html) features a collection of case studies and demos about optimization.
 #'
@@ -37,6 +36,7 @@
 #' @template param_store_models
 #' @template param_check_values
 #' @template param_callbacks
+#' @template param_ties_method
 #'
 #' @export
 #' @examples
@@ -112,7 +112,19 @@ AutoFSelector = R6Class("AutoFSelector",
     #'
     #' @param fselector ([FSelector])\cr
     #'   Optimization algorithm.
-    initialize = function(fselector, learner, resampling, measure = NULL, terminator, store_fselect_instance = TRUE, store_benchmark_result = TRUE, store_models = FALSE, check_values = FALSE, callbacks = list()) {
+    initialize = function(
+      fselector,
+      learner,
+      resampling,
+      measure = NULL,
+      terminator,
+      store_fselect_instance = TRUE,
+      store_benchmark_result = TRUE,
+      store_models = FALSE,
+      check_values = FALSE,
+      callbacks = list(),
+      ties_method = "least_features"
+      ) {
       ia = list()
       self$fselector = assert_r6(fselector, "FSelector")$clone()
       ia$learner = assert_learner(as_learner(learner, clone = TRUE))
@@ -126,6 +138,7 @@ AutoFSelector = R6Class("AutoFSelector",
 
       ia$check_values = assert_flag(check_values)
       ia$callbacks = assert_callbacks(as_callbacks(callbacks))
+      ia$ties_method = assert_choice(ties_method, c("least_features", "random"))
       self$instance_args = ia
 
       super$initialize(
@@ -282,8 +295,14 @@ AutoFSelector = R6Class("AutoFSelector",
     #' Hash (unique identifier) for this object.
     hash = function(rhs) {
       assert_ro_binding(rhs)
-      calculate_hash(class(self), self$id, self$param_set$values, private$.predict_type, self$fallback$hash, self$instance_args,
-        private$.store_fselect_instance)
+      calculate_hash(class(self), self$id, self$param_set$values, private$.predict_type, self$fallback$hash, self$parallel_predict, self$fselector, self$instance_args, private$.store_fselect_instance)
+    },
+
+    #' @field phash (`character(1)`)\cr
+    #' Hash (unique identifier) for this partial object, excluding some components which are varied systematically during tuning (parameter values) or feature selection (feature names).
+    phash = function(rhs) {
+      assert_ro_binding(rhs)
+      self$hash
     }
   ),
 

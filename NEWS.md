@@ -1,3 +1,17 @@
+# mlr3fselect 0.12.0
+
+* feat: Add number of features to `instance$result`.
+* feat: Add `ties_method` options `"least_features"` and `"random"` to `ArchiveFSelect$best()`.
+* refactor: Optimize runtime of `ArchiveFSelect$best()` method.
+* feat: Add importance scores to result of `FSelectorRFE`.
+* feat: Add number of features to `as.data.table.ArchiveFSelect()`.
+* feat: Features can be always included with the `always_include` column role.
+* fix: Add `$phash()` method to `AutoFSelector`.
+* fix: Include `FSelector` in hash of  `AutoFSelector`.
+* refactor: Change default batch size of `FSelectorRandomSearch` to 10.
+* feat: Add `batch_size` parameter to `FSelectorExhaustiveSearch` to reduce memory consumption.
+* compatibility: Work with new paradox version 1.0.0
+
 # mlr3fselect 0.11.0
 
 * BREAKING CHANGE: The `method` parameter of `fselect()`, `fselect_nested()` and `auto_fselector()` is renamed to `fselector`.

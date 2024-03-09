@@ -35,7 +35,8 @@
 #' @section Resources:
 #' There are several sections about feature selection in the [mlr3book](https://mlr3book.mlr-org.com).
 #'
-#' * Getting started with [wrapper feature selection](https://mlr3book.mlr-org.com/feature-selection.html#fs-wrapper).
+#' * Getting started with [wrapper feature selection](https://mlr3book.mlr-org.com/chapters/chapter6/feature_selection.html#sec-fs-wrapper).
+#' * Do a [sequential forward selection](https://mlr3book.mlr-org.com/chapters/chapter6/feature_selection.html#sec-fs-wrapper-example) Palmer Penguins data set.
 #'
 #' The [gallery](https://mlr-org.com/gallery.html) features a collection of case studies and demos about optimization.
 #'
@@ -53,6 +54,7 @@
 #' @template param_store_benchmark_result
 #' @template param_callbacks
 #' @template param_xdt
+#' @template param_ties_method
 #'
 #' @export
 #' @examples
@@ -92,12 +94,24 @@ FSelectInstanceSingleCrit = R6Class("FSelectInstanceSingleCrit",
 
     #' @description
     #' Creates a new instance of this [R6][R6::R6Class] class.
-    initialize = function(task, learner, resampling, measure, terminator, store_benchmark_result = TRUE, store_models = FALSE, check_values = FALSE, callbacks = list()) {
+    initialize = function(
+      task,
+      learner,
+      resampling,
+      measure,
+      terminator,
+      store_benchmark_result = TRUE,
+      store_models = FALSE,
+      check_values = FALSE,
+      callbacks = list(),
+      ties_method = "least_features"
+      ) {
       # initialized specialized fselect archive and objective
       archive = ArchiveFSelect$new(
         search_space = task_to_domain(assert_task(task)),
         codomain = measures_to_codomain(assert_measure(measure)),
-        check_values = check_values)
+        check_values = check_values,
+        ties_method = ties_method)
 
       objective = ObjectiveFSelect$new(
         task = task,
@@ -126,13 +140,16 @@ FSelectInstanceSingleCrit = R6Class("FSelectInstanceSingleCrit",
     #'   Optimal outcome.
     assign_result = function(xdt, y) {
       # Add feature names to result for easy task subsetting
-      features = list(self$objective$task$feature_names[as.logical(xdt)])
+      feature_names = self$objective$task$feature_names
+      features = list(feature_names[as.logical(xdt[, feature_names, with = FALSE])])
       xdt[, features := list(features)]
+      xdt[, n_features := length(features[[1L]])]
       assert_data_table(xdt, nrows = 1L)
       assert_names(names(xdt), must.include = self$search_space$ids())
       assert_number(y)
       assert_names(names(y), permutation.of = self$objective$codomain$ids())
       private$.result = cbind(xdt, t(y)) # t(y) so the name of y stays
+      call_back("on_result", self$callbacks, private$.context)
     },
 
     #' @description

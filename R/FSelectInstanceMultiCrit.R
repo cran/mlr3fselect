@@ -12,7 +12,7 @@
 #' @section Resources:
 #' There are several sections about feature selection in the [mlr3book](https://mlr3book.mlr-org.com).
 #'
-#'  * Learn about [multi-objective optimization](https://mlr3book.mlr-org.com/optimization.html#sec-multi-metrics-tuning) (Tuning workflow is transferable to feature selection).
+#'  * Learn about [multi-objective optimization](https://mlr3book.mlr-org.com/chapters/chapter6/feature_selection.html#sec-multicrit-featsel).
 #'
 #' The [gallery](https://mlr-org.com/gallery.html) features a collection of case studies and demos about optimization.
 #'
@@ -99,11 +99,13 @@ FSelectInstanceMultiCrit = R6Class("FSelectInstanceMultiCrit",
         self$objective$task$feature_names[as.logical(x)]
       })
       xdt[, features := list(features)]
+      xdt[, n_features := map(features, length)]
       assert_data_table(xdt)
       assert_names(names(xdt), must.include = self$search_space$ids())
       assert_data_table(ydt)
       assert_names(names(ydt), permutation.of = self$objective$codomain$ids())
       private$.result = cbind(xdt, ydt)
+      call_back("on_result", self$callbacks, private$.context)
     },
 
     #' @description

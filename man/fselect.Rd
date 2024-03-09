@@ -16,7 +16,8 @@ fselect(
   store_benchmark_result = TRUE,
   store_models = FALSE,
   check_values = FALSE,
-  callbacks = list()
+  callbacks = list(),
+  ties_method = "least_features"
 )
 }
 \arguments{
@@ -61,6 +62,14 @@ validity?}
 
 \item{callbacks}{(list of \link{CallbackFSelect})\cr
 List of callbacks.}
+
+\item{ties_method}{(\code{character(1)})\cr
+The method to break ties when selecting sets while optimizing and when selecting the best set.
+Can be \code{"least_features"} or \code{"random"}.
+The option \code{"least_features"} (default) selects the feature set with the least features.
+If there are multiple best feature sets with the same number of features, one is selected randomly.
+The \code{random} method returns a random feature set from the best feature sets.
+Ignored if multiple measures are used.}
 }
 \value{
 \link{FSelectInstanceSingleCrit} | \link{FSelectInstanceMultiCrit}
@@ -83,7 +92,8 @@ If no termination criterion is needed, set \code{term_evals}, \code{term_time} a
 
 There are several sections about feature selection in the \href{https://mlr3book.mlr-org.com}{mlr3book}.
 \itemize{
-\item Getting started with \href{https://mlr3book.mlr-org.com/feature-selection.html#fs-wrapper}{wrapper feature selection}.
+\item Getting started with \href{https://mlr3book.mlr-org.com/chapters/chapter6/feature_selection.html#sec-fs-wrapper}{wrapper feature selection}.
+\item Do a \href{https://mlr3book.mlr-org.com/chapters/chapter6/feature_selection.html#sec-fs-wrapper-example}{sequential forward selection} Palmer Penguins data set.
 }
 
 The \href{https://mlr-org.com/gallery.html}{gallery} features a collection of case studies and demos about optimization.

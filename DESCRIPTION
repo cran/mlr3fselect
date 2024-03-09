@@ -1,6 +1,6 @@
 Package: mlr3fselect
 Title: Feature Selection for 'mlr3'
-Version: 0.11.0
+Version: 0.12.0
 Authors@R: c(
     person("Marc", "Becker", , "marcbecker@posteo.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-8115-0400")),
@@ -31,7 +31,7 @@ Config/testthat/parallel: true
 Encoding: UTF-8
 Language: en-US
 NeedsCompilation: no
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Collate: 'ArchiveFSelect.R' 'AutoFSelector.R' 'CallbackFSelect.R'
         'ContextEval.R' 'FSelectInstanceSingleCrit.R'
         'FSelectInstanceMultiCrit.R' 'mlr_fselectors.R' 'FSelector.R'
@@ -44,11 +44,11 @@ Collate: 'ArchiveFSelect.R' 'AutoFSelector.R' 'CallbackFSelect.R'
         'extract_inner_fselect_results.R' 'fselect.R'
         'fselect_nested.R' 'helper.R' 'mlr_callbacks.R' 'reexports.R'
         'sugar.R' 'zzz.R'
-Packaged: 2023-03-02 10:52:27 UTC; marc
+Packaged: 2024-03-09 11:06:34 UTC; marc
 Author: Marc Becker [aut, cre] (<https://orcid.org/0000-0002-8115-0400>),
   Patrick Schratz [aut] (<https://orcid.org/0000-0003-0748-6624>),
   Michel Lang [aut] (<https://orcid.org/0000-0001-9754-0393>),
   Bernd Bischl [aut] (<https://orcid.org/0000-0001-6002-6980>)
 Maintainer: Marc Becker <marcbecker@posteo.de>
 Repository: CRAN
-Date/Publication: 2023-03-02 11:40:02 UTC
+Date/Publication: 2024-03-09 11:30:06 UTC
