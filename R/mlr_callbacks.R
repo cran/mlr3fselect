@@ -1,10 +1,10 @@
 #' @title Backup Benchmark Result Callback
 #'
-#' @include CallbackFSelect.R
+#' @include CallbackBatchFSelect.R
 #' @name mlr3fselect.backup
 #'
 #' @description
-#' This [CallbackFSelect] writes the [mlr3::BenchmarkResult] after each batch to disk.
+#' This [CallbackBatchFSelect] writes the [mlr3::BenchmarkResult] after each batch to disk.
 #'
 #' @examples
 #' clbk("mlr3fselect.backup", path = "backup.rds")
@@ -21,7 +21,7 @@
 NULL
 
 load_callback_backup = function() {
-  callback_fselect("mlr3fselect.backup",
+  callback_batch_fselect("mlr3fselect.backup",
     label = "Backup Benchmark Result Callback",
     man = "mlr3fselect::mlr3fselect.backup",
     on_optimization_begin = function(callback, context) {
@@ -38,7 +38,7 @@ load_callback_backup = function() {
 
 #' @title SVM-RFE Callback
 #'
-#' @include CallbackFSelect.R
+#' @include CallbackBatchFSelect.R
 #' @name mlr3fselect.svm_rfe
 #'
 #' @description
@@ -71,7 +71,7 @@ load_callback_backup = function() {
 NULL
 
 load_callback_svm_rfe = function() {
-  callback_fselect("mlr3fselect.svm_rfe",
+  callback_batch_fselect("mlr3fselect.svm_rfe",
     label = "SVM-RFE Callback",
     man = "mlr3fselect::mlr3fselect.svm_rfe",
     on_optimization_begin = function(callback, context) {
@@ -111,12 +111,14 @@ load_callback_svm_rfe = function() {
 
 #' @title One Standard Error Rule Callback
 #'
-#' @include CallbackFSelect.R
+#' @include CallbackBatchFSelect.R
 #' @name mlr3fselect.one_se_rule
 #'
 #' @description
 #' Selects the smallest feature set within one standard error of the best as the result.
-#' If there are multiple feature sets with the same performance and number of features, the first one is selected.
+#' If there are multiple such feature sets with the same number of features, the first one is selected.
+#' If the sets have exactly the same performance but different number of features,
+#' the one with the smallest number of features is selected.
 #'
 #' @source
 #' `r format_bib("kuhn2013")`
@@ -139,7 +141,7 @@ load_callback_svm_rfe = function() {
 NULL
 
 load_callback_one_se_rule = function() {
-  callback = callback_fselect("mlr3fselect.one_se_rule",
+  callback = callback_batch_fselect("mlr3fselect.one_se_rule",
     label = "One Standard Error Rule Callback",
     man = "mlr3fselect::mlr3fselect.one_se_rule",
 
@@ -152,11 +154,17 @@ load_callback_one_se_rule = function() {
       y = data[[archive$cols_y]]
       se = sd(y) / sqrt(length(y))
 
-      # select smallest future set within one standard error of the best
-      best_y = context$instance$result_y
-      data = data[y > best_y - se & y < best_y + se, ][which.min(n_features)]
-
-      context$instance$.__enclos_env__$private$.result = data[, names(context$instance$result), with = FALSE]
+      columns_to_keep = setdiff(names(context$instance$result), "x_domain")
+      if (se == 0) {
+        # select smallest future set when all scores are the same
+        context$instance$.__enclos_env__$private$.result =
+          data[,columns_to_keep, with = FALSE][which.min(n_features)]
+      } else {
+        # select smallest future set within one standard error of the best
+        best_y = context$instance$result_y
+        context$instance$.__enclos_env__$private$.result =
+          data[y > best_y - se & y < best_y + se, columns_to_keep, with = FALSE][which.min(n_features)]
+      }
     }
   )
 }
