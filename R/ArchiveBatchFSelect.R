@@ -50,6 +50,8 @@
 #'       Score feature sets on additional measures.
 #'
 #' @template param_ties_method
+#' @template param_xdt
+#' @template param_ydt
 #'
 #' @export
 ArchiveBatchFSelect = R6Class("ArchiveBatchFSelect",
@@ -85,6 +87,15 @@ ArchiveBatchFSelect = R6Class("ArchiveBatchFSelect",
 
       # initialize empty benchmark result
       self$benchmark_result = BenchmarkResult$new()
+    },
+
+    #' @description
+    #' Adds function evaluations to the archive table.
+    #'
+    #' @param xss_trafoed (`list()`)\cr
+    #'   Ignored in feature selection.
+    add_evals = function(xdt, xss_trafoed = NULL, ydt) {
+      super$add_evals(xdt = xdt, ydt = ydt)
     },
 
     #' @description
@@ -214,8 +225,6 @@ ArchiveBatchFSelect = R6Class("ArchiveBatchFSelect",
 #' @export
 as.data.table.ArchiveBatchFSelect = function(x, ..., exclude_columns = "uhash", measures = NULL) {
   if (nrow(x$data) == 0) return(data.table())
-  # always ignore x_domain column
-  exclude_columns = c("x_domain", exclude_columns)
   # default value for exclude_columns might be not present in archive
   if (!x$benchmark_result$n_resample_results) exclude_columns = exclude_columns[exclude_columns %nin% "uhash"]
   cols_y_extra = NULL

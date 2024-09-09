@@ -5,7 +5,7 @@
 #' @import mlr3
 #' @import bbotk
 #' @importFrom R6 R6Class
-#' @importFrom utils combn head
+#' @importFrom utils combn head packageVersion
 #' @importFrom stats sd
 "_PACKAGE"
 
@@ -18,8 +18,8 @@
   x$optimizer_properties = c(x$optimizer_properties, "requires_model")
 
   x = utils::getFromNamespace("mlr_reflections", ns = "mlr3")
-  x$task_col_roles$classif = c(x$task_col_roles$classif, "always_included")
-  x$task_col_roles$regr = c(x$task_col_roles$regr, "always_included")
+  x$task_col_roles$classif = unique(c(x$task_col_roles$classif, "always_included"))
+  x$task_col_roles$regr = unique(c(x$task_col_roles$regr, "always_included"))
 
   # callbacks
   x = utils::getFromNamespace("mlr_callbacks", ns = "mlr3misc")

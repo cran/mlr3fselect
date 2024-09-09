@@ -1,3 +1,10 @@
+# mlr3fselect 1.1.0
+
+* compatibility: mlr3 0.21.0
+* fix: Delete intermediate `BenchmarkResult` in `ObjectiveFSelectBatch` after optimization.
+* fix: Reloading mlr3fselect does not duplicate column roles anymore.
+* perf: Remove `x_domain` column from archive.
+
 # mlr3fselect 1.0.0
 
 * feat: Add ensemble feature selection function `ensemble_fselect()`.
