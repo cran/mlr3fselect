@@ -1,13 +1,13 @@
-11075742dc3b6dcf90c5bd4fe5ce2e34 *DESCRIPTION
+7400b460567d4cb6168af530c867677e *DESCRIPTION
 95be990b452dd2b3a6b66a7980fe84ac *NAMESPACE
-b81f6a73c766164534f538854caa6b5f *NEWS.md
+43cd0302f9ec78630b4f88ea1c1722c9 *NEWS.md
 5b2703efd8a0810b76335ad30fc62a1f *R/ArchiveBatchFSelect.R
 744f3792fd706322fe85974954e428b9 *R/AutoFSelector.R
 ef22be8b8f75011ca8d3910709901f7f *R/CallbackBatchFSelect.R
 2284fd0494e7190e578b578db63f6df5 *R/ContextBatchFSelect.R
 5c1285209321e01cf62bd4729223fcea *R/EnsembleFSResult.R
-d4c86be6d9f8e66a32a1c7a724ef5b42 *R/FSelectInstanceBatchMultiCrit.R
-9cf9abd9aa92eeb7522426dd07b6bd9d *R/FSelectInstanceBatchSingleCrit.R
+677b59150a7f3764531720d7fa837a94 *R/FSelectInstanceBatchMultiCrit.R
+b57964840aef271e0de011b7802d5b8a *R/FSelectInstanceBatchSingleCrit.R
 0f01c4acec30311d2a36505628e387b8 *R/FSelector.R
 3b58cba7d371cd99fa97b4cbaf5b0c5c *R/FSelectorBatch.R
 94294e4aab90fdd41df92cd666481cbe *R/FSelectorBatchDesignPoints.R
@@ -36,7 +36,7 @@ f035f5da0b43fd046c796e4104d9a234 *R/fselect.R
 4f52501de0d7732c341b923d2996738b *R/sugar.R
 0b84c1e5cc7e6a7263cde4237081ee03 *R/zzz.R
 b0a2e778b133ea8979683f99a8cef5b4 *README.md
-7080893e02c49cd296d4424b9be55069 *build/partial.rdb
+aa5e5a2cbfaea3d9b6cdbe378ac48cee *build/partial.rdb
 002bc4cdcc65e8c264e1e3c00c348175 *inst/WORDLIST
 a409f0a8734f57b9500b203a52b657c3 *inst/testthat/helper_expectations.R
 5f8ab536b715a4985a661688b32cc763 *inst/testthat/helper_fselector.R
@@ -45,8 +45,8 @@ a409f0a8734f57b9500b203a52b657c3 *inst/testthat/helper_expectations.R
 7d503559259bb189329ca78a0f6a87f2 *man/AutoFSelector.Rd
 0ca1dcadf6b643cc0a0894a572224a0a *man/CallbackBatchFSelect.Rd
 b2a3b91be00bc7eae8d44fe2c7da598a *man/ContextBatchFSelect.Rd
-482e46baf6a6e78b867686ebd9024e20 *man/FSelectInstanceBatchMultiCrit.Rd
-6c79d084ff04ea681b129dede00fab40 *man/FSelectInstanceBatchSingleCrit.Rd
+b43585ab8bd2e0be2ba00e667f5091bc *man/FSelectInstanceBatchMultiCrit.Rd
+4c51106cf0889e9a2feb3866782abf2e *man/FSelectInstanceBatchSingleCrit.Rd
 54f7bcd8d6baa4df9b0beb5318e27687 *man/FSelector.Rd
 dee6dc7bbc0511fbfb34a463c38582be *man/FSelectorBatch.Rd
 8c624eb9839b7108b053dec42aaef8a8 *man/FSelectorBatchFromOptimizerBatch.Rd
