@@ -1,3 +1,10 @@
+# mlr3fselect 1.3.0
+
+* refactor: Use [fastVoteR](https://github.com/bblodfon/fastVoteR) for feature ranking in `EnsembleFSResult()` objects
+* feat: Add embedded ensemble feature selection `embedded_ensemble_fselect()`
+* refactor/perf: `ensemble_fselect()` and `EnsembleFSResult()`
+* feat: Add `c.EnsembleFSResult(...)` and `EnsembleFSResult$combine(...)` methods
+
 # mlr3fselect 1.2.1
 
 * compatibility: mlr3 0.22.0
