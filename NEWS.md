@@ -1,3 +1,9 @@
+# mlr3fselect 1.4.0
+
+* feat: Introduce asynchronous optimization with the `FSelectorAsync` and `FSelectInstanceAsync*` classes.
+* feat: Add `max_nfeatures` argument in the `pareto_front()` and `knee_points()` methods of an `EnsembleFSResult()`.
+* feat: Classes are now printed with the `cli` package.
+
 # mlr3fselect 1.3.0
 
 * refactor: Use [fastVoteR](https://github.com/bblodfon/fastVoteR) for feature ranking in `EnsembleFSResult()` objects

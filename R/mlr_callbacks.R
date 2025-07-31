@@ -48,7 +48,7 @@ load_callback_backup = function() {
 #' @source
 #' `r format_bib("guyon2002")`
 #'
-#' @examples
+#' @examplesIf requireNamespace("mlr3learners", quietly = TRUE)
 #' clbk("mlr3fselect.svm_rfe")
 #'
 #' library(mlr3learners)
@@ -225,6 +225,28 @@ load_callback_internal_tuning = function() {
     on_auto_fselector_after_final_model = function(callback, context) {
       # restore original learner
       context$auto_fselector$instance_args$learner = callback$state$learner
+    }
+  )
+}
+
+#' @title Freeze Archive Callback
+#'
+#' @include CallbackAsyncFSelect.R
+#' @name mlr3fselect.async_freeze_archive
+#'
+#' @description
+#' This [CallbackAsyncFSelect] freezes the [ArchiveAsyncFSelect] to [ArchiveAsyncFSelectFrozen] after the optimization has finished.
+#'
+#' @examples
+#' clbk("mlr3fselect.async_freeze_archive")
+NULL
+
+load_callback_freeze_archive = function() {
+  callback_async_fselect("mlr3fselect.async_freeze_archive",
+    label = "Archive Freeze Callback",
+    man = "mlr3fselect::mlr3fselect.async_freeze_archive",
+    on_optimization_end = function(callback, context) {
+      context$instance$archive = ArchiveAsyncFSelectFrozen$new(context$instance$archive)
     }
   )
 }

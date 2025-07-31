@@ -149,6 +149,7 @@ Hash (unique identifier) for this partial object, excluding some components whic
 \if{html}{\out{
 <details><summary>Inherited methods</summary>
 <ul>
+<li><span class="pkg-link" data-pkg="mlr3" data-topic="Learner" data-id="configure"><a href='../../mlr3/html/Learner.html#method-Learner-configure'><code>mlr3::Learner$configure()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="mlr3" data-topic="Learner" data-id="encapsulate"><a href='../../mlr3/html/Learner.html#method-Learner-encapsulate'><code>mlr3::Learner$encapsulate()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="mlr3" data-topic="Learner" data-id="format"><a href='../../mlr3/html/Learner.html#method-Learner-format'><code>mlr3::Learner$format()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="mlr3" data-topic="Learner" data-id="help"><a href='../../mlr3/html/Learner.html#method-Learner-help'><code>mlr3::Learner$help()</code></a></span></li>
@@ -177,6 +178,7 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
   check_values = FALSE,
   callbacks = NULL,
   ties_method = "least_features",
+  rush = NULL,
   id = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -225,6 +227,9 @@ The option \code{"least_features"} (default) selects the feature set with the le
 If there are multiple best feature sets with the same number of features, one is selected randomly.
 The \code{random} method returns a random feature set from the best feature sets.
 Ignored if multiple measures are used.}
+
+\item{\code{rush}}{(\code{Rush})\cr
+If a rush instance is supplied, the optimization runs without batches.}
 
 \item{\code{id}}{(\code{character(1)})\cr
 Identifier for the new instance.}

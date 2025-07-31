@@ -49,6 +49,7 @@
 #'     * `measures` (list of [mlr3::Measure])\cr
 #'       Score feature sets on additional measures.
 #'
+#' @template param_search_space
 #' @template param_ties_method
 #' @template param_xdt
 #' @template param_ydt
@@ -65,10 +66,6 @@ ArchiveBatchFSelect = R6Class("ArchiveBatchFSelect",
 
     #' @description
     #' Creates a new instance of this [R6][R6::R6Class] class.
-    #'
-    #' @param search_space ([paradox::ParamSet])\cr
-    #'   Search space.
-    #'   Internally created from provided [mlr3::Task] by instance.
     #'
     #' @param codomain ([bbotk::Codomain])\cr
     #'   Specifies codomain of objective function i.e. a set of performance measures.
@@ -158,7 +155,7 @@ ArchiveBatchFSelect = R6Class("ArchiveBatchFSelect",
     #'
     #' @param ... (ignored).
     print = function() {
-      catf(format(self))
+      cat_cli(cli_h1("{.cls {class(self)[1]}}"))
       print(self$data[, setdiff(names(self$data), "uhash"), with = FALSE], digits=2)
     },
 
