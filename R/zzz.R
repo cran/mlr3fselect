@@ -12,15 +12,17 @@
 
 .onLoad = function(libname, pkgname) {
   # nocov start
-  utils::globalVariables(c("super", "self", "n_features"))
+  utils::globalVariables(c("super", "self", "n_features", "errors"))
 
   # reflections
   x = utils::getFromNamespace("bbotk_reflections", ns = "bbotk")
   x$optimizer_properties = c(x$optimizer_properties, "requires_model")
 
   x = utils::getFromNamespace("mlr_reflections", ns = "mlr3")
-  x$task_col_roles$classif = unique(c(x$task_col_roles$classif, "always_included"))
-  x$task_col_roles$regr = unique(c(x$task_col_roles$regr, "always_included"))
+  walk(names(x$task_col_roles), function(task_type) {
+    x$task_col_roles[[task_type]] = unique(c(x$task_col_roles[[task_type]], "always_included"))
+  })
+
   x$loaded_packages = c(x$loaded_packages, "mlr3fselect")
 
   # callbacks
