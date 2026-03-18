@@ -1,6 +1,6 @@
 Package: mlr3fselect
 Title: Feature Selection for 'mlr3'
-Version: 1.5.0
+Version: 1.5.1
 Authors@R: c(
     person("Marc", "Becker", , "marcbecker@posteo.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-8115-0400")),
@@ -24,10 +24,10 @@ URL: https://mlr3fselect.mlr-org.com,
         https://github.com/mlr-org/mlr3fselect
 BugReports: https://github.com/mlr-org/mlr3fselect/issues
 Depends: mlr3 (>= 1.0.1), R (>= 3.1.0)
-Imports: bbotk (>= 1.8.1), checkmate (>= 2.0.0), cli, data.table, lgr,
+Imports: bbotk (>= 1.9.0), checkmate (>= 2.0.0), cli, data.table, lgr,
         mlr3misc (>= 0.15.1), paradox (>= 1.0.0), R6, stabm
 Suggests: e1071, fastVoteR, genalg, mirai, mlr3learners, mlr3pipelines,
-        rpart, rush (>= 0.4.1), testthat (>= 3.0.0)
+        processx, redux, rpart, rush (>= 0.4.1), testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Config/testthat/parallel: false
 Encoding: UTF-8
@@ -60,7 +60,7 @@ Collate: 'ArchiveAsyncFSelect.R' 'ArchiveAsyncFSelectFrozen.R'
         'extract_inner_fselect_results.R' 'faggregate.R' 'fselect.R'
         'fselect_nested.R' 'helper.R' 'mlr_callbacks.R' 'reexports.R'
         'sugar.R' 'zzz.R'
-Packaged: 2025-11-27 10:08:45 UTC; marc
+Packaged: 2026-03-18 08:10:36 UTC; marc
 Author: Marc Becker [aut, cre] (ORCID: <https://orcid.org/0000-0002-8115-0400>),
   Patrick Schratz [aut] (ORCID: <https://orcid.org/0000-0003-0748-6624>),
   Michel Lang [aut] (ORCID: <https://orcid.org/0000-0001-9754-0393>),
@@ -68,4 +68,4 @@ Author: Marc Becker [aut, cre] (ORCID: <https://orcid.org/0000-0002-8115-0400>),
   John Zobolas [aut] (ORCID: <https://orcid.org/0000-0002-3609-8674>)
 Maintainer: Marc Becker <marcbecker@posteo.de>
 Repository: CRAN
-Date/Publication: 2025-11-27 10:40:08 UTC
+Date/Publication: 2026-03-18 09:00:02 UTC
